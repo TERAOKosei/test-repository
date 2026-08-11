@@ -1,6 +1,6 @@
 ---
 name: Feature Request
-about: 新機能・改善の提案
+about: 新機能の追加・機能の改善
 title: '[FEAT] '
 labels: feature
 ---
