@@ -17,16 +17,19 @@ jobs:
           fetch-depth: 0
 
       - name: Verify parent is main
+        env:
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           # main ブランチの最新状態を取得
           git fetch origin main
 
           # PR ブランチと origin/main の共通の先祖（分岐点）を取得
-          BRANCH_POINT=$(git merge-base HEAD origin/main)
+          BRANCH_POINT=$(git merge-base "$PR_HEAD_SHA" origin/main)
 
           # origin/main の最新コミットハッシュを取得
           MAIN_HEAD=$(git rev-parse origin/main)
 
+          echo "PR Head SHA:  $PR_HEAD_SHA"
           echo "Branch Point: $BRANCH_POINT"
           echo "Main HEAD:     $MAIN_HEAD"
 
