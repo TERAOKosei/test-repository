@@ -23,19 +23,15 @@ jobs:
           # main ブランチの最新状態を取得
           git fetch origin main
 
-          # PR ブランチと origin/main の共通の先祖（分岐点）を取得
-          BRANCH_POINT=$(git merge-base "$PR_HEAD_SHA" origin/main)
-
           # origin/main の最新コミットハッシュを取得
           MAIN_HEAD=$(git rev-parse origin/main)
 
           echo "PR Head SHA:  $PR_HEAD_SHA"
-          echo "Branch Point: $BRANCH_POINT"
           echo "Main HEAD:     $MAIN_HEAD"
 
-          # 分岐点が main の HEAD と一致しない場合はエラーにする
-          if [ "$BRANCH_POINT" != "$MAIN_HEAD" ]; then
-            echo "::error::このブランチは main の最新状態から分岐していません。main を pull / rebase してから再度お試しください。"
+          # origin/main の最新コミットが PR ブランチの履歴（祖先）に含まれているか検証
+          if ! git merge-base --is-ancestor "$MAIN_HEAD" "$PR_HEAD_SHA"; then
+            echo "::error::最新の main が取り込まれていません。main から rebase するか、git merge origin/main を行って最新状態を取り込んでください。"
             exit 1
           fi
 
