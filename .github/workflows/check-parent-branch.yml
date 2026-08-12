@@ -10,13 +10,14 @@ jobs:
   check-parent:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout PR head brunch
         uses: actions/checkout@v4
         with:
-          # 分岐元の比較に必要なため、すべてのコミット履歴を取得する
+          # 自動マージコミットではなく、PR の実際の先頭コミットをチェックアウトする
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
 
-      - name: Verify parent is main
+      - name: Chack if branch is up to date with main
         env:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
