@@ -37,4 +37,3 @@ jobs:
           fi
 
           echo "Check passed: Branch is properly based on the latest main."
-          
